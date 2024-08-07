@@ -1,0 +1,46 @@
+.header {
+  background-color: #aaa3;
+  padding: 10px 0px;
+  &__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__nav__logo {
+    h1 {
+      font-size: 24px;
+    }
+  }
+
+  &__nav__form {
+    position: relative;
+    input {
+      padding: 8px 12px;
+      width: 300px;
+      border: 1px solid #aaa6;
+      outline: none;
+    }
+  }
+
+  &__nav__value {
+    position: absolute;
+    border-radius: 2px;
+    top: 35px;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    box-shadow: 1px 1px 10px #aaa6;
+    padding: 10px;
+    line-height: 20px;
+    &__item {
+      display: flex;
+      gap: 100px;
+      justify-content: space-between;
+    }
+    p {
+      width: 100px;
+    }
+  }
+}
