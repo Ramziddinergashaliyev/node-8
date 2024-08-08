@@ -167,46 +167,41 @@ class UsersController {
   }
   async updateProfile(req, res) {
     try {
-      let profile = await Users.findOne({ _id: req.user._id });
-      if (!profile) {
+      const id = req.user._id;
+      const { username } = req.body;
+
+      const user = await Users.findById(id);
+      if (!user) {
         return res.status(404).json({
-          msg: "Profile not found.",
+          msg: "Foydalanuvchi topilmadi",
           variant: "error",
           payload: null,
         });
       }
 
-      const existingProfile = await Users.findOne({
-        username: req.body.username,
-      });
-      if (
-        existingProfile &&
-        existingProfile._id.toString() !== req.user._id.toString()
-      ) {
+      const checkUsername = await Users.findOne({ username });
+      if (checkUsername && checkUsername._id.toString() !== id) {
         return res.status(400).json({
-          msg: "Username already exists.",
-          variant: "error",
+          msg: "Bu username mavjud",
+          variant: "warning",
           payload: null,
         });
       }
 
-      if (!req.body.password) {
-        req.body.password = profile.password;
-      }
+      const updateUser = await Users.findByIdAndUpdate(
+        id,
+        { ...req.body, password: user.password },
+        { new: true }
+      );
 
-      const newProfile = await Users.findByIdAndUpdate(req.user._id, req.body, {
-        new: true,
-      });
-
-      res.status(200).json({
-        msg: "Profile is updated",
+      return res.status(200).json({
+        msg: "Profil yangilandi",
         variant: "success",
-        payload: newProfile,
+        payload: updateUser,
       });
     } catch (error) {
-      console.error("Error updating profile:", error);
-      res.status(500).json({
-        msg: "Server error",
+      return res.status(500).json({
+        msg: "Server xatosi",
         variant: "error",
         payload: null,
       });
